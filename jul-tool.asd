@@ -1,5 +1,5 @@
 (defsystem jul-tool
-    :name "Jul-Tool"
+    :name "Jul Tool"
     :version "0.9.0"
     :author "Jason Lowdermilk <jlowdermilk@gmail.com>"
     :licence "MIT"

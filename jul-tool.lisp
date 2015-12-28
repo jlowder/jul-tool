@@ -3,7 +3,7 @@
 (defpackage :jul-tool
   (:use :common-lisp
         :julian
-        :com.lowdermilk.prompt)
+        :prompt)
   (:export :jul-tool))
 
 (in-package :jul-tool)
