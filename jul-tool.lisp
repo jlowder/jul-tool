@@ -1,12 +1,12 @@
 (in-package :cl-user)
 
-(defpackage :com.lowdermilk.jul-tool
+(defpackage :jul-tool
   (:use :common-lisp
-        :com.lowdermilk.julian
+        :julian
         :com.lowdermilk.prompt)
   (:export :jul-tool))
 
-(in-package :com.lowdermilk.jul-tool)
+(in-package :jul-tool)
 
 (defparameter command '())
 (defparameter args '())
