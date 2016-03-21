@@ -75,12 +75,12 @@
   (format t "Unix time: ~A~%" (- reg-a unix-epoch))) 
 
 (defun j2000 () ; 2000.0 + (Julian date − 2451545.0)/365.25
-  (format t "J2000 time: ~F~%" (+ 2000.0l0 (/ (/ (- reg-a j2000-epoch) 86400l0) 365.25l0))))
+  (format t "J2000 time: ~F~%" (/ (/ (- reg-a j2000-epoch) 86400l0) 365.25l0)))
 
 (defun read-j2000 (str) ; 2000.0 + (Julian date − 2451545.0)/365.25
   (let* ((base (parse-string-to-float str))
-         (partial (- base 2000.0l0))
-         (days (* partial 365.25l0))) ; days after 2000 1 1
+         (days (* base 365.25l0)) ; days after 2000 1 1
+         (partial (- days 2000.0l0)))
     (setf reg-a (+ j2000-epoch (round (* days 86400l0))))))
 
 (defun tle ()
@@ -140,14 +140,14 @@
   (setprompt)
   (display))
 
-(defprompt ("=" "set gregorian date" *prompts*)
+(defprompt ("=" "set gregorian date" *prompts* '("year" "month" "day"))
   (setf reg-a (* 86400 (gregorian->julian (parse-integer (poparg) :junk-allowed t)
                                           (parse-integer (poparg) :junk-allowed t)
                                           (parse-integer (poparg) :junk-allowed t))))
   (setprompt)
   (display))
 
-(defprompt ("=j" "set julian date" *prompts*)
+(defprompt ("=j" "set julian date" *prompts* '("days (float)"))
   (setf reg-a (round (* 86400l0 (parse-string-to-float (poparg)))))
   (setprompt)
   (display))
@@ -155,7 +155,7 @@
 (defprompt ("j2000" "display as J2000 format" *prompts*)
   (j2000))
 
-(defprompt ("=j2000" "set from astronimical J2000 format" *prompts*)
+(defprompt ("=j2000" "set from astronimical J2000 format" *prompts* '("years from 2000 epoch (float)"))
   (setf reg-a (read-j2000 (poparg)))
   (setprompt)
   (display))
@@ -163,7 +163,7 @@
 (defprompt ("unix" "display as unix time" *prompts*)
   (unixtime))
 
-(defprompt ("=unix" "set from unix format time" *prompts*)
+(defprompt ("=unix" "set from unix format time" *prompts* '("integer number of seconds since 1970"))
   (read-unixtime (poparg))
   (setprompt)
   (display))
@@ -171,12 +171,12 @@
 (defprompt ("tle" "display as TLE format time" *prompts*)
   (tle))
 
-(defprompt ("=tle" "set from the TLE format time string" *prompts*)
+(defprompt ("=tle" "set from the TLE format time string" *prompts* '("YYDDD.NNNNNNNN"))
   (read-tletime (poparg))
   (setprompt)
   (display))
 
-(defprompt ("tz" "set timezone offset" *prompts*)
+(defprompt ("tz" "set timezone offset" *prompts* '("offset in hours"))
   (let* ((offset (* -86400/24 (parse-integer (poparg) :junk-allowed t)))
          (delta (- tz-offset offset)))
     (setf reg-a (+ reg-a delta))
